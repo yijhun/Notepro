@@ -20,6 +20,9 @@ public struct MainContentView: View {
                 NavigationLink(value: SidebarItem.calendar) {
                     Label("Calendar", systemImage: "calendar")
                 }
+                NavigationLink(value: SidebarItem.graph) {
+                    Label("Graph", systemImage: "network")
+                }
             }
             .navigationTitle("Productivity")
         } content: {
@@ -29,6 +32,8 @@ public struct MainContentView: View {
                     NoteListView(selectedNote: $selectedNote)
                 case .calendar:
                     TaskListView()
+                case .graph:
+                    Text("Select a note to view connections")
                 }
             } else {
                 Text("Select an item")
@@ -39,11 +44,31 @@ public struct MainContentView: View {
                 case .notes:
                     if let note = selectedNote {
                         NoteEditorView(note: note)
+                            .toolbar {
+                                ToolbarItem(placement: .primaryAction) {
+                                    NavigationLink(destination: SmartAssistantView(note: note)) {
+                                        Label("Smart Assistant", systemImage: "sparkles")
+                                    }
+                                }
+                            }
                     } else {
                         Text("Select a note")
                     }
                 case .calendar:
                     CalendarView()
+                        .toolbar {
+                            ToolbarItem(placement: .primaryAction) {
+                                Button {
+                                    // Trigger Google Sync
+                                    // In real implementation, call GoogleCalendarService.shared.syncEvent()
+                                    print("Syncing with Google Calendar...")
+                                } label: {
+                                    Label("Sync Google", systemImage: "arrow.triangle.2.circlepath")
+                                }
+                            }
+                        }
+                case .graph:
+                    GraphView()
                 }
             } else {
                 Text("Select an item")
@@ -78,6 +103,7 @@ public struct MainContentView: View {
     enum SidebarItem: Hashable {
         case notes
         case calendar
+        case graph
     }
 }
 
