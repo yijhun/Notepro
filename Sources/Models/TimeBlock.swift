@@ -2,33 +2,37 @@ import Foundation
 import SwiftData
 
 @Model
-final class TimeBlock: Taggable {
-    @Attribute(.unique) var id: UUID
+public final class TimeBlock: Taggable {
+    @Attribute(.unique) public var id: UUID
     
     // For syncing with Google Calendar
-    @Attribute(.unique) var googleEventID: String?
+    @Attribute(.unique) public var googleEventID: String?
     
-    var title: String
-    var startDate: Date
-    var endDate: Date
-    var duration: TimeInterval // Cached duration in seconds
-    var isAllDay: Bool
+    public var title: String
+    public var startDate: Date
+    public var endDate: Date
+
+    /// Cached duration in seconds.
+    /// This should be updated whenever `startDate` or `endDate` changes.
+    public var duration: TimeInterval
+
+    public var isAllDay: Bool
     
     // Relationships
     
     // Optional link to a Task (e.g. "Work on Thesis")
     @Relationship(inverse: \Task.timeBlocks)
-    var linkedTask: Task?
+    public var linkedTask: Task?
     
     // Optional link to a Note (e.g. "Read Paper X")
     @Relationship(inverse: \Note.timeBlocks)
-    var linkedNote: Note?
+    public var linkedNote: Note?
     
     // Tags for categorization (e.g. "Deep Work", "Admin")
     @Relationship(inverse: \Tag.timeBlocks)
-    var tags: [Tag]?
+    public var tags: [Tag]?
     
-    init(
+    public init(
         id: UUID = UUID(),
         googleEventID: String? = nil,
         title: String,

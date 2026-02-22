@@ -2,32 +2,32 @@ import Foundation
 import SwiftData
 
 @Model
-final class Task: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var isCompleted: Bool
-    var dueDate: Date?
-    var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
-    var createdAt: Date
+public final class Task: Taggable, TimeBlockable, Embeddable {
+    @Attribute(.unique) public var id: UUID
+    public var title: String
+    public var isCompleted: Bool
+    public var dueDate: Date?
+    public var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
+    public var createdAt: Date
     
     // Embedding for Semantic Search / RAG (Optional)
-    var embedding: [Float]?
+    public var embedding: [Float]?
     
     // Relationships
     
     // Linked Note (e.g. if task is created within a note)
     @Relationship(inverse: \Note.tasks)
-    var linkedNote: Note?
+    public var linkedNote: Note?
     
     // Tags: Many-to-Many
     @Relationship(inverse: \Tag.tasks)
-    var tags: [Tag]?
+    public var tags: [Tag]?
     
     // TimeBlocks associated with this task (e.g. focused work sessions)
     @Relationship(inverse: \TimeBlock.linkedTask)
-    var timeBlocks: [TimeBlock]?
+    public var timeBlocks: [TimeBlock]?
     
-    init(
+    public init(
         id: UUID = UUID(),
         title: String,
         isCompleted: Bool = false,
@@ -43,5 +43,14 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.priority = priority
         self.createdAt = createdAt
         self.embedding = embedding
+    }
+}
+
+extension Task {
+    public enum Priority: Int, Codable, CaseIterable {
+        case none = 0
+        case low = 1
+        case medium = 2
+        case high = 3
     }
 }

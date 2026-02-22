@@ -1,19 +1,20 @@
 import Foundation
 import SwiftData
 
+/// A tag that can be applied to Notes, Tasks, TimeBlocks, and References.
 @Model
-final class Tag {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var colorHex: String
+public final class Tag {
+    @Attribute(.unique) public var id: UUID
+    public var name: String
+    public var colorHex: String
     
     // Relationships
-    var notes: [Note]?
-    var tasks: [Task]?
-    var references: [ZoteroReference]?
-    var timeBlocks: [TimeBlock]?
+    public var notes: [Note]?
+    public var tasks: [Task]?
+    public var references: [ZoteroReference]?
+    public var timeBlocks: [TimeBlock]?
     
-    init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
+    public init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
         self.id = id
         self.name = name
         self.colorHex = colorHex
