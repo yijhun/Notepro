@@ -40,8 +40,10 @@ final class TimeBlock: Taggable {
         self.googleEventID = googleEventID
         self.title = title
         self.startDate = startDate
-        self.endDate = endDate
-        self.duration = endDate.timeIntervalSince(startDate)
+        // Security fix: Ensure endDate is not before startDate to prevent negative duration
+        let validEndDate = max(startDate, endDate)
+        self.endDate = validEndDate
+        self.duration = validEndDate.timeIntervalSince(startDate)
         self.isAllDay = isAllDay
     }
 }
