@@ -2,43 +2,43 @@ import Foundation
 import SwiftData
 
 @Model
-final class Note: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var content: String
-    var createdAt: Date
-    var modifiedAt: Date
+public final class Note: Taggable, TimeBlockable, Embeddable {
+    @Attribute(.unique) public var id: UUID
+    public var title: String
+    public var content: String
+    public var createdAt: Date
+    public var modifiedAt: Date
     
     // Embedding for Semantic Search / RAG
-    var embedding: [Float]?
+    public var embedding: [Float]?
     
     // Relationships
     
     // Tags: Many-to-Many
     @Relationship(inverse: \Tag.notes)
-    var tags: [Tag]?
+    public var tags: [Tag]?
     
     // Zotero References: Many-to-Many
     @Relationship(inverse: \ZoteroReference.linkedNotes)
-    var references: [ZoteroReference]?
+    public var references: [ZoteroReference]?
     
     // Tasks associated with this note (e.g. action items inside the note)
     @Relationship(deleteRule: .cascade, inverse: \Task.linkedNote)
-    var tasks: [Task]?
+    public var tasks: [Task]?
     
     // TimeBlocks associated with this note (e.g. time spent working on this note)
     @Relationship(inverse: \TimeBlock.linkedNote)
-    var timeBlocks: [TimeBlock]?
+    public var timeBlocks: [TimeBlock]?
     
     // Bidirectional Linking
     // Outgoing links: Notes this note links TO
     @Relationship(inverse: \Note.backlinks)
-    var linkedNotes: [Note]?
+    public var linkedNotes: [Note]?
     
     // Incoming links: Notes that link TO this note
-    var backlinks: [Note]?
+    public var backlinks: [Note]?
     
-    init(
+    public init(
         id: UUID = UUID(),
         title: String,
         content: String = "",

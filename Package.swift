@@ -11,10 +11,17 @@ let package = Package(
         .library(
             name: "ProductivityModels",
             targets: ["Models"]),
+        .library(
+            name: "ProductivityFeatures",
+            targets: ["Features"]),
     ],
     targets: [
         .target(
             name: "Models",
             path: "Sources/Models"),
+        .target(
+            name: "Features",
+            dependencies: ["Models"],
+            path: "Sources/Features"),
     ]
 )
