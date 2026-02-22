@@ -11,7 +11,11 @@ final class TimeBlock: Taggable {
     var title: String
     var startDate: Date
     var endDate: Date
-    var duration: TimeInterval // Cached duration in seconds
+
+    /// Cached duration in seconds.
+    /// This should be updated whenever `startDate` or `endDate` changes.
+    var duration: TimeInterval
+
     var isAllDay: Bool
     
     // Relationships

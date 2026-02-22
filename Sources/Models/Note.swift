@@ -23,7 +23,7 @@ final class Note: Taggable, TimeBlockable, Embeddable {
     var references: [ZoteroReference]?
     
     // Tasks associated with this note (e.g. action items inside the note)
-    @Relationship(inverse: \Task.linkedNote)
+    @Relationship(deleteRule: .cascade, inverse: \Task.linkedNote)
     var tasks: [Task]?
     
     // TimeBlocks associated with this note (e.g. time spent working on this note)

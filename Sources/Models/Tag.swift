@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 
+/// A tag that can be applied to Notes, Tasks, TimeBlocks, and References.
 @Model
 final class Tag {
     @Attribute(.unique) var id: UUID

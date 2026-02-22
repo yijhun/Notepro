@@ -1,5 +1,7 @@
 import Foundation
 
+// MARK: - Shared Traits
+
 /// Protocol for items that can be tagged
 protocol Taggable {
     var tags: [Tag]? { get set }

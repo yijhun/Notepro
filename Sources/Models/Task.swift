@@ -45,3 +45,12 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.embedding = embedding
     }
 }
+
+extension Task {
+    enum Priority: Int, Codable, CaseIterable {
+        case none = 0
+        case low = 1
+        case medium = 2
+        case high = 3
+    }
+}

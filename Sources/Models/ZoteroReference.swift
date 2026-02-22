@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 
+/// A reference item synchronized from Zotero.
 @Model
 final class ZoteroReference: Taggable, Embeddable {
     @Attribute(.unique) var id: UUID
