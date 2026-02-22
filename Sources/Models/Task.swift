@@ -40,7 +40,8 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.title = title
         self.isCompleted = isCompleted
         self.dueDate = dueDate
-        self.priority = priority
+        // Validate priority range [0, 3]
+        self.priority = max(0, min(priority, 3))
         self.createdAt = createdAt
         self.embedding = embedding
     }
