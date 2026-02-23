@@ -36,6 +36,8 @@ final class Note: Taggable, TimeBlockable, Embeddable {
     var linkedNotes: [Note]?
     
     // Incoming links: Notes that link TO this note
+    // This is the inverse of linkedNotes
+    @Relationship(inverse: \Note.linkedNotes)
     var backlinks: [Note]?
     
     init(

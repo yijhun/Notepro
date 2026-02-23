@@ -7,7 +7,7 @@ final class ZoteroReference: Taggable, Embeddable {
     @Attribute(.unique) var zoteroID: String
     
     var title: String
-    var authors: [String]
+    var authors: [String] // Stored as JSON or simple array in SwiftData
     var abstract: String?
     var publicationYear: Int?
     var url: URL?

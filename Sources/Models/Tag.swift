@@ -8,6 +8,7 @@ final class Tag {
     var colorHex: String
     
     // Relationships
+    // The inverse relationships are defined in the respective models
     var notes: [Note]?
     var tasks: [Task]?
     var references: [ZoteroReference]?
