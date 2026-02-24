@@ -9,18 +9,8 @@ final class TimeBlock: Taggable {
     @Attribute(.unique) var googleEventID: String?
     
     var title: String
-    var startDate: Date {
-        didSet {
-            duration = endDate.timeIntervalSince(startDate)
-        }
-    }
-
-    var endDate: Date {
-        didSet {
-            duration = endDate.timeIntervalSince(startDate)
-        }
-    }
-
+    var startDate: Date
+    var endDate: Date
     var duration: TimeInterval // Cached duration in seconds
     var isAllDay: Bool
     
@@ -56,8 +46,8 @@ final class TimeBlock: Taggable {
     }
 
     /// Recalculates the duration based on start and end dates.
-    /// Call this manually if automated updates fail or when bulk editing.
-    func recalculateDuration() {
+    /// Call this manually after updating startDate or endDate.
+    func updateDuration() {
         self.duration = endDate.timeIntervalSince(startDate)
     }
 }
