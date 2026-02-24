@@ -8,6 +8,7 @@ final class Tag {
     var colorHex: String
     
     // Relationships
+    // Implicit inverses are defined on the other side
     var notes: [Note]?
     var tasks: [Task]?
     var references: [ZoteroReference]?
