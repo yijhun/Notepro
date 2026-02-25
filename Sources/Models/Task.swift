@@ -46,7 +46,8 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.title = title
         self.isCompleted = isCompleted
         self.dueDate = dueDate
-        self.priority = priority
+        // Clamp priority between 0 and 3
+        self.priority = max(0, min(priority, 3))
         self.createdAt = createdAt
         self.embedding = embedding
         self.timerStartTime = timerStartTime
