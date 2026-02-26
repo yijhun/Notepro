@@ -1,5 +1,3 @@
-import Foundation
-
 /// Protocol for items that can be tagged
 protocol Taggable {
     var tags: [Tag]? { get set }
