@@ -5,7 +5,10 @@ import SwiftData
 final class Note: Taggable, TimeBlockable, Embeddable {
     @Attribute(.unique) var id: UUID
     var title: String
+
+    @Attribute(.externalStorage)
     var content: String
+
     var createdAt: Date
     var modifiedAt: Date
     

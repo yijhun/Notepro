@@ -16,11 +16,13 @@ final class ZoteroReference: Taggable, Embeddable {
     var embedding: [Float]?
     
     // Relationships
-    // Assuming Note has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Note.references)
+
+    // Linked Notes: Many-to-Many
+    // The inverse relationship is defined in Note.swift as @Relationship(inverse: \ZoteroReference.linkedNotes)
     var linkedNotes: [Note]?
     
-    // Assuming Tag has a property `references: [ZoteroReference]?`
+    // Tags: Many-to-Many
+    // The inverse relationship is defined here, pointing to Tag.references
     @Relationship(inverse: \Tag.references)
     var tags: [Tag]?
 
