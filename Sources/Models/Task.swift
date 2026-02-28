@@ -7,7 +7,7 @@ final class Task: Taggable, TimeBlockable, Embeddable {
     var title: String
     var isCompleted: Bool
     var dueDate: Date?
-    var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
+    private(set) var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
     var createdAt: Date
     
     // Embedding for Semantic Search / RAG (Optional)
@@ -28,7 +28,6 @@ final class Task: Taggable, TimeBlockable, Embeddable {
     var tags: [Tag]?
     
     // TimeBlocks associated with this task (e.g. focused work sessions)
-    @Relationship(inverse: \TimeBlock.linkedTask)
     var timeBlocks: [TimeBlock]?
     
     init(
@@ -46,10 +45,15 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.title = title
         self.isCompleted = isCompleted
         self.dueDate = dueDate
-        self.priority = priority
+        self.priority = max(0, min(priority, 3))
         self.createdAt = createdAt
         self.embedding = embedding
         self.timerStartTime = timerStartTime
         self.accumulatedTime = accumulatedTime
+    }
+
+    /// Safely sets the priority ensuring it remains within the valid range [0, 3]
+    func setPriority(_ newPriority: Int) {
+        self.priority = max(0, min(newPriority, 3))
     }
 }
