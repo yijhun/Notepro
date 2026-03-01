@@ -17,11 +17,9 @@ final class ZoteroReference: Taggable, Embeddable {
     
     // Relationships
     // Assuming Note has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Note.references)
     var linkedNotes: [Note]?
     
     // Assuming Tag has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Tag.references)
     var tags: [Tag]?
 
     init(
