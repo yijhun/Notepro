@@ -28,7 +28,6 @@ final class Task: Taggable, TimeBlockable, Embeddable {
     var tags: [Tag]?
     
     // TimeBlocks associated with this task (e.g. focused work sessions)
-    @Relationship(inverse: \TimeBlock.linkedTask)
     var timeBlocks: [TimeBlock]?
     
     init(
@@ -46,7 +45,7 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.title = title
         self.isCompleted = isCompleted
         self.dueDate = dueDate
-        self.priority = priority
+        self.priority = max(0, min(priority, 3))
         self.createdAt = createdAt
         self.embedding = embedding
         self.timerStartTime = timerStartTime
