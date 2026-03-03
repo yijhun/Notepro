@@ -11,13 +11,13 @@ final class TimeBlock: Taggable {
     var title: String
     var startDate: Date {
         didSet {
-            duration = endDate.timeIntervalSince(startDate)
+            recalculateDuration()
         }
     }
 
     var endDate: Date {
         didSet {
-            duration = endDate.timeIntervalSince(startDate)
+            recalculateDuration()
         }
     }
 
