@@ -11,6 +11,22 @@ protocol TimeBlockable {
 }
 
 /// Protocol for items that support vector embeddings for semantic search
-protocol Embeddable {
-    var embedding: [Float]? { get set }
+protocol Embeddable: AnyObject {
+    var embedding: Data? { get set }
+}
+
+extension Data {
+    /// Converts Data back to an array of Floats
+    func toFloatArray() -> [Float] {
+        var array = [Float](repeating: 0, count: self.count / MemoryLayout<Float>.stride)
+        _ = array.withUnsafeMutableBytes { self.copyBytes(to: $0) }
+        return array
+    }
+}
+
+extension Array where Element == Float {
+    /// Converts an array of Floats to Data
+    func toData() -> Data {
+        return self.withUnsafeBufferPointer { Data(buffer: $0) }
+    }
 }
