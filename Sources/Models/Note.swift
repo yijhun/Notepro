@@ -5,12 +5,12 @@ import SwiftData
 final class Note: Taggable, TimeBlockable, Embeddable {
     @Attribute(.unique) var id: UUID
     var title: String
-    var content: String
+    @Attribute(.externalStorage) var content: String
     var createdAt: Date
     var modifiedAt: Date
     
     // Embedding for Semantic Search / RAG
-    var embedding: [Float]?
+    var embedding: Data?
     
     // Relationships
     
@@ -36,6 +36,7 @@ final class Note: Taggable, TimeBlockable, Embeddable {
     var linkedNotes: [Note]?
     
     // Incoming links: Notes that link TO this note
+    @Relationship(inverse: \Note.linkedNotes)
     var backlinks: [Note]?
     
     init(
@@ -44,7 +45,7 @@ final class Note: Taggable, TimeBlockable, Embeddable {
         content: String = "",
         createdAt: Date = Date(),
         modifiedAt: Date = Date(),
-        embedding: [Float]? = nil
+        embedding: Data? = nil
     ) {
         self.id = id
         self.title = title
