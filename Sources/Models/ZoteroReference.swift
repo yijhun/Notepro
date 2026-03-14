@@ -13,15 +13,13 @@ final class ZoteroReference: Taggable, Embeddable {
     var url: URL?
     
     // Embedding for Semantic Search
-    var embedding: [Float]?
+    var embedding: Data?
     
     // Relationships
     // Assuming Note has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Note.references)
     var linkedNotes: [Note]?
     
     // Assuming Tag has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Tag.references)
     var tags: [Tag]?
 
     init(
@@ -32,7 +30,7 @@ final class ZoteroReference: Taggable, Embeddable {
         abstract: String? = nil,
         publicationYear: Int? = nil,
         url: URL? = nil,
-        embedding: [Float]? = nil
+        embedding: Data? = nil
     ) {
         self.id = id
         self.zoteroID = zoteroID
