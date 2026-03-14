@@ -9,29 +9,19 @@ final class TimeBlock: Taggable {
     @Attribute(.unique) var googleEventID: String?
     
     var title: String
-    var startDate: Date {
-        didSet {
-            duration = endDate.timeIntervalSince(startDate)
-        }
-    }
+    var startDate: Date
 
-    var endDate: Date {
-        didSet {
-            duration = endDate.timeIntervalSince(startDate)
-        }
-    }
+    var endDate: Date
 
-    var duration: TimeInterval // Cached duration in seconds
+    var duration: TimeInterval { endDate.timeIntervalSince(startDate) }
     var isAllDay: Bool
     
     // Relationships
     
     // Optional link to a Task (e.g. "Work on Thesis")
-    @Relationship(inverse: \Task.timeBlocks)
     var linkedTask: Task?
     
     // Optional link to a Note (e.g. "Read Paper X")
-    @Relationship(inverse: \Note.timeBlocks)
     var linkedNote: Note?
     
     // Tags for categorization (e.g. "Deep Work", "Admin")
@@ -51,13 +41,6 @@ final class TimeBlock: Taggable {
         self.title = title
         self.startDate = startDate
         self.endDate = endDate
-        self.duration = endDate.timeIntervalSince(startDate)
         self.isAllDay = isAllDay
-    }
-
-    /// Recalculates the duration based on start and end dates.
-    /// Call this manually if automated updates fail or when bulk editing.
-    func recalculateDuration() {
-        self.duration = endDate.timeIntervalSince(startDate)
     }
 }
