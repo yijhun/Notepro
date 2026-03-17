@@ -11,6 +11,6 @@ protocol TimeBlockable {
 }
 
 /// Protocol for items that support vector embeddings for semantic search
-protocol Embeddable {
+protocol Embeddable: AnyObject {
     var embedding: [Float]? { get set }
 }
