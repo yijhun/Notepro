@@ -13,11 +13,15 @@ final class ZoteroReference: Taggable, Embeddable {
     var url: URL?
     
     // Embedding for Semantic Search
-    var embedding: [Float]?
+    var embeddingData: Data?
+
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
     
     // Relationships
-    // Assuming Note has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Note.references)
+    // Note owns the mapping, so no @Relationship(inverse:) here
     var linkedNotes: [Note]?
     
     // Assuming Tag has a property `references: [ZoteroReference]?`
@@ -41,6 +45,8 @@ final class ZoteroReference: Taggable, Embeddable {
         self.abstract = abstract
         self.publicationYear = publicationYear
         self.url = url
+
+        // Use the computed property setter for initialization
         self.embedding = embedding
     }
 }
