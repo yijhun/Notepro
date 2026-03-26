@@ -3,15 +3,31 @@ import SwiftData
 
 @Model
 final class Task: Taggable, TimeBlockable, Embeddable {
+    enum Priority: Int, Codable, CaseIterable {
+        case none = 0
+        case low = 1
+        case medium = 2
+        case high = 3
+    }
+
     @Attribute(.unique) var id: UUID
     var title: String
     var isCompleted: Bool
     var dueDate: Date?
-    var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
+    var priorityRaw: Int // 0: None, 1: Low, 2: Medium, 3: High
+
+    var priority: Priority {
+        get { Priority(rawValue: priorityRaw) ?? .none }
+        set { priorityRaw = newValue.rawValue }
+    }
     var createdAt: Date
     
     // Embedding for Semantic Search / RAG (Optional)
-    var embedding: [Float]?
+    var embeddingData: Data?
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
 
     // Timer State Persistence
     var timerStartTime: Date? // If not nil, timer is running since this date
@@ -46,9 +62,9 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.title = title
         self.isCompleted = isCompleted
         self.dueDate = dueDate
-        self.priority = priority
+        self.priorityRaw = priority
         self.createdAt = createdAt
-        self.embedding = embedding
+        self.embeddingData = embedding?.toData()
         self.timerStartTime = timerStartTime
         self.accumulatedTime = accumulatedTime
     }
