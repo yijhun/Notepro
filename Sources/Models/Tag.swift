@@ -5,7 +5,16 @@ import SwiftData
 final class Tag {
     @Attribute(.unique) var id: UUID
     var name: String
-    var colorHex: String
+    private var colorHexRaw: String
+
+    var colorHex: String {
+        get { colorHexRaw }
+        set {
+            if Tag.isValidHexColor(newValue) {
+                colorHexRaw = newValue
+            }
+        }
+    }
     
     // Relationships
     var notes: [Note]?
@@ -16,6 +25,12 @@ final class Tag {
     init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
         self.id = id
         self.name = name
-        self.colorHex = colorHex
+        self.colorHexRaw = Tag.isValidHexColor(colorHex) ? colorHex : "#808080"
+    }
+
+    static func isValidHexColor(_ hex: String) -> Bool {
+        let hexRegex = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        let hexPredicate = NSPredicate(format: "SELF MATCHES %@", hexRegex)
+        return hexPredicate.evaluate(with: hex)
     }
 }

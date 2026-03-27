@@ -13,15 +13,17 @@ final class ZoteroReference: Taggable, Embeddable {
     var url: URL?
     
     // Embedding for Semantic Search
-    var embedding: [Float]?
+    var embeddingData: Data?
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
     
     // Relationships
-    // Assuming Note has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Note.references)
+    // Note owns the inverse relationship references: [ZoteroReference]?
     var linkedNotes: [Note]?
     
-    // Assuming Tag has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Tag.references)
+    // Tag owns the inverse relationship references: [ZoteroReference]?
     var tags: [Tag]?
 
     init(
@@ -41,6 +43,6 @@ final class ZoteroReference: Taggable, Embeddable {
         self.abstract = abstract
         self.publicationYear = publicationYear
         self.url = url
-        self.embedding = embedding
+        self.embeddingData = embedding?.toData()
     }
 }
