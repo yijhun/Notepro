@@ -5,8 +5,19 @@ import SwiftData
 final class Tag {
     @Attribute(.unique) var id: UUID
     var name: String
-    var colorHex: String
+    private var colorHexRaw: String
     
+    var colorHex: String {
+        get {
+            let regex = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+            let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+            return predicate.evaluate(with: colorHexRaw) ? colorHexRaw : "#808080"
+        }
+        set {
+            colorHexRaw = newValue
+        }
+    }
+
     // Relationships
     var notes: [Note]?
     var tasks: [Task]?
@@ -16,6 +27,6 @@ final class Tag {
     init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
         self.id = id
         self.name = name
-        self.colorHex = colorHex
+        self.colorHexRaw = colorHex
     }
 }
