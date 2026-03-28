@@ -3,15 +3,36 @@ import SwiftData
 
 @Model
 final class Task: Taggable, TimeBlockable, Embeddable {
+    enum Priority: Int, Codable, CaseIterable {
+        case none = 0
+        case low = 1
+        case medium = 2
+        case high = 3
+    }
+
     @Attribute(.unique) var id: UUID
     var title: String
     var isCompleted: Bool
     var dueDate: Date?
-    var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
+    var priorityRaw: Int // 0: None, 1: Low, 2: Medium, 3: High
     var createdAt: Date
     
+    var priority: Priority {
+        get { Priority(rawValue: priorityRaw) ?? .none }
+        set { priorityRaw = newValue.rawValue }
+    }
+
     // Embedding for Semantic Search / RAG (Optional)
-    var embedding: [Float]?
+    var embeddingData: Data?
+
+    var embedding: [Float]? {
+        get {
+            return embeddingData?.toFloatArray()
+        }
+        set {
+            embeddingData = newValue?.toData()
+        }
+    }
 
     // Timer State Persistence
     var timerStartTime: Date? // If not nil, timer is running since this date
@@ -20,7 +41,6 @@ final class Task: Taggable, TimeBlockable, Embeddable {
     // Relationships
     
     // Linked Note (e.g. if task is created within a note)
-    @Relationship(inverse: \Note.tasks)
     var linkedNote: Note?
     
     // Tags: Many-to-Many
@@ -36,7 +56,7 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         title: String,
         isCompleted: Bool = false,
         dueDate: Date? = nil,
-        priority: Int = 0,
+        priority: Priority = .none,
         createdAt: Date = Date(),
         embedding: [Float]? = nil,
         timerStartTime: Date? = nil,
@@ -46,9 +66,9 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.title = title
         self.isCompleted = isCompleted
         self.dueDate = dueDate
-        self.priority = priority
+        self.priorityRaw = priority.rawValue
         self.createdAt = createdAt
-        self.embedding = embedding
+        self.embeddingData = embedding?.toData()
         self.timerStartTime = timerStartTime
         self.accumulatedTime = accumulatedTime
     }
