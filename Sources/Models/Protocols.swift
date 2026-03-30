@@ -1,16 +1,17 @@
 import Foundation
 
 /// Protocol for items that can be tagged
-protocol Taggable {
-    var tags: [Tag]? { get set }
+protocol Taggable: AnyObject {
+    var tags: Set<Tag>? { get set }
 }
 
 /// Protocol for items that can have associated time blocks (events)
-protocol TimeBlockable {
-    var timeBlocks: [TimeBlock]? { get set }
+protocol TimeBlockable: AnyObject {
+    var timeBlocks: Set<TimeBlock>? { get set }
 }
 
 /// Protocol for items that support vector embeddings for semantic search
 protocol Embeddable {
-    var embedding: [Float]? { get set }
+    var embeddingData: Data? { get set }
+    var embedding: [Float]? { get }
 }
