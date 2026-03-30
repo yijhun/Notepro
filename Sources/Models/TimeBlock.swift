@@ -36,7 +36,7 @@ final class TimeBlock: Taggable {
     
     // Tags for categorization (e.g. "Deep Work", "Admin")
     @Relationship(inverse: \Tag.timeBlocks)
-    var tags: [Tag]?
+    var tags: Set<Tag>?
     
     init(
         id: UUID = UUID(),
