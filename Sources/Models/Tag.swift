@@ -3,9 +3,23 @@ import SwiftData
 
 @Model
 final class Tag {
+    static let colorHexPattern = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    static let defaultColorHex = "#808080"
+
     @Attribute(.unique) var id: UUID
     var name: String
-    var colorHex: String
+    internal var colorHexRaw: String
+
+    var colorHex: String {
+        get { colorHexRaw }
+        set {
+            if newValue.range(of: Tag.colorHexPattern, options: .regularExpression) != nil {
+                colorHexRaw = newValue
+            } else {
+                colorHexRaw = Tag.defaultColorHex
+            }
+        }
+    }
     
     // Relationships
     var notes: [Note]?
@@ -13,9 +27,13 @@ final class Tag {
     var references: [ZoteroReference]?
     var timeBlocks: [TimeBlock]?
     
-    init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
+    init(id: UUID = UUID(), name: String, colorHex: String = Tag.defaultColorHex) {
         self.id = id
         self.name = name
-        self.colorHex = colorHex
+        if colorHex.range(of: Tag.colorHexPattern, options: .regularExpression) != nil {
+            self.colorHexRaw = colorHex
+        } else {
+            self.colorHexRaw = Tag.defaultColorHex
+        }
     }
 }
