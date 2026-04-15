@@ -11,7 +11,12 @@ final class Task: Taggable, TimeBlockable, Embeddable {
     var createdAt: Date
     
     // Embedding for Semantic Search / RAG (Optional)
-    var embedding: [Float]?
+    var embeddingData: Data?
+
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
 
     // Timer State Persistence
     var timerStartTime: Date? // If not nil, timer is running since this date
@@ -48,7 +53,7 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.dueDate = dueDate
         self.priority = priority
         self.createdAt = createdAt
-        self.embedding = embedding
+        self.embeddingData = embedding?.toData()
         self.timerStartTime = timerStartTime
         self.accumulatedTime = accumulatedTime
     }
