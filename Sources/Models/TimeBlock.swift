@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for TimeBlock
 final class TimeBlock: Taggable {
     @Attribute(.unique) var id: UUID
     
