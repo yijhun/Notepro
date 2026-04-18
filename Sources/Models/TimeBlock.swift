@@ -1,28 +1,28 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for TimeBlock
 final class TimeBlock: Taggable {
-    @Attribute(.unique) var id: UUID
+    var id: UUID = UUID()
     
     // For syncing with Google Calendar
-    @Attribute(.unique) var googleEventID: String?
+    var googleEventID: String?
     
-    var title: String
-    var startDate: Date {
+    var title: String = ""
+    var startDate: Date = Date() {
         didSet {
             duration = endDate.timeIntervalSince(startDate)
         }
     }
 
-    var endDate: Date {
+    var endDate: Date = Date() {
         didSet {
             duration = endDate.timeIntervalSince(startDate)
         }
     }
 
-    var duration: TimeInterval // Cached duration in seconds
-    var isAllDay: Bool
+    var duration: TimeInterval = 0 // Cached duration in seconds
+    var isAllDay: Bool = false
     
     // Relationships
     
