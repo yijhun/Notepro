@@ -1,17 +1,22 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for Task
 final class Task: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var isCompleted: Bool
-    var dueDate: Date?
-    var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
-    var createdAt: Date
+    var id: UUID = UUID()
+    var title: String = ""
+    var isCompleted: Bool = false
+    var dueDate: Date? = nil
+    var priority: Int = 0 // 0: None, 1: Low, 2: Medium, 3: High
+    var createdAt: Date = Date()
     
     // Embedding for Semantic Search / RAG (Optional)
-    var embedding: [Float]?
+    var embeddingData: Data?
+
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
 
     // Timer State Persistence
     var timerStartTime: Date? // If not nil, timer is running since this date
@@ -33,7 +38,7 @@ final class Task: Taggable, TimeBlockable, Embeddable {
     
     init(
         id: UUID = UUID(),
-        title: String,
+        title: String = "",
         isCompleted: Bool = false,
         dueDate: Date? = nil,
         priority: Int = 0,
