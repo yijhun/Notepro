@@ -1,33 +1,35 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for ZoteroReference
 final class ZoteroReference: Taggable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    @Attribute(.unique) var zoteroID: String
+    var id: UUID = UUID()
+    var zoteroID: String = ""
     
-    var title: String
-    var authors: [String]
-    var abstract: String?
-    var publicationYear: Int?
-    var url: URL?
+    var title: String = ""
+    var authors: [String] = []
+    var abstract: String? = nil
+    var publicationYear: Int? = nil
+    var url: URL? = nil
     
     // Embedding for Semantic Search
-    var embedding: [Float]?
+    var embeddingData: Data? = nil
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
     
     // Relationships
-    // Assuming Note has a property `references: [ZoteroReference]?`
     @Relationship(inverse: \Note.references)
-    var linkedNotes: [Note]?
+    var linkedNotes: [Note]? = nil
     
-    // Assuming Tag has a property `references: [ZoteroReference]?`
     @Relationship(inverse: \Tag.references)
-    var tags: [Tag]?
+    var tags: [Tag]? = nil
 
     init(
         id: UUID = UUID(),
-        zoteroID: String,
-        title: String,
+        zoteroID: String = "",
+        title: String = "",
         authors: [String] = [],
         abstract: String? = nil,
         publicationYear: Int? = nil,
