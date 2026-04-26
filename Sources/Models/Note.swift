@@ -1,42 +1,46 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for Note
 final class Note: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var content: String
-    var createdAt: Date
-    var modifiedAt: Date
+    var id: UUID = UUID()
+    var title: String = ""
+    @Attribute(.externalStorage) var content: String = ""
+    var createdAt: Date = Date()
+    var modifiedAt: Date = Date()
     
     // Embedding for Semantic Search / RAG
-    var embedding: [Float]?
+    var embeddingData: Data? = nil
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
     
     // Relationships
     
     // Tags: Many-to-Many
     @Relationship(inverse: \Tag.notes)
-    var tags: [Tag]?
+    var tags: [Tag]? = nil
     
     // Zotero References: Many-to-Many
     @Relationship(inverse: \ZoteroReference.linkedNotes)
-    var references: [ZoteroReference]?
+    var references: [ZoteroReference]? = nil
     
     // Tasks associated with this note (e.g. action items inside the note)
     @Relationship(inverse: \Task.linkedNote)
-    var tasks: [Task]?
+    var tasks: [Task]? = nil
     
     // TimeBlocks associated with this note (e.g. time spent working on this note)
     @Relationship(inverse: \TimeBlock.linkedNote)
-    var timeBlocks: [TimeBlock]?
+    var timeBlocks: [TimeBlock]? = nil
     
     // Bidirectional Linking
     // Outgoing links: Notes this note links TO
     @Relationship(inverse: \Note.backlinks)
-    var linkedNotes: [Note]?
+    var linkedNotes: [Note]? = nil
     
     // Incoming links: Notes that link TO this note
-    var backlinks: [Note]?
+    var backlinks: [Note]? = nil
     
     init(
         id: UUID = UUID(),
