@@ -1,42 +1,60 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for Task
 final class Task: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var isCompleted: Bool
-    var dueDate: Date?
-    var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
-    var createdAt: Date
+
+    enum Priority: Int, Codable {
+        case none = 0
+        case low = 1
+        case medium = 2
+        case high = 3
+    }
+
+    var id: UUID = UUID()
+    var title: String = ""
+    var isCompleted: Bool = false
+    var dueDate: Date? = nil
+    var priorityRaw: Int = Priority.none.rawValue
+
+    var priority: Priority {
+        get { Priority(rawValue: priorityRaw) ?? .none }
+        set { priorityRaw = newValue.rawValue }
+    }
+
+    var createdAt: Date = Date()
     
     // Embedding for Semantic Search / RAG (Optional)
-    var embedding: [Float]?
+    var embeddingData: Data? = nil
+
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
 
     // Timer State Persistence
-    var timerStartTime: Date? // If not nil, timer is running since this date
-    var accumulatedTime: TimeInterval // Total time tracked before current session
+    var timerStartTime: Date? = nil // If not nil, timer is running since this date
+    var accumulatedTime: TimeInterval = 0 // Total time tracked before current session
     
     // Relationships
     
     // Linked Note (e.g. if task is created within a note)
     @Relationship(inverse: \Note.tasks)
-    var linkedNote: Note?
+    var linkedNote: Note? = nil
     
     // Tags: Many-to-Many
     @Relationship(inverse: \Tag.tasks)
-    var tags: [Tag]?
+    var tags: [Tag]? = nil
     
     // TimeBlocks associated with this task (e.g. focused work sessions)
-    @Relationship(inverse: \TimeBlock.linkedTask)
-    var timeBlocks: [TimeBlock]?
+    var timeBlocks: [TimeBlock]? = nil
     
     init(
         id: UUID = UUID(),
         title: String,
         isCompleted: Bool = false,
         dueDate: Date? = nil,
-        priority: Int = 0,
+        priority: Priority = .none,
         createdAt: Date = Date(),
         embedding: [Float]? = nil,
         timerStartTime: Date? = nil,
@@ -46,10 +64,10 @@ final class Task: Taggable, TimeBlockable, Embeddable {
         self.title = title
         self.isCompleted = isCompleted
         self.dueDate = dueDate
-        self.priority = priority
+        self.priorityRaw = priority.rawValue
         self.createdAt = createdAt
-        self.embedding = embedding
         self.timerStartTime = timerStartTime
         self.accumulatedTime = accumulatedTime
+        self.embedding = embedding
     }
 }
