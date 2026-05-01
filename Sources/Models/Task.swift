@@ -1,21 +1,33 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for Task
 final class Task: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var isCompleted: Bool
-    var dueDate: Date?
-    var priority: Int // 0: None, 1: Low, 2: Medium, 3: High
-    var createdAt: Date
+    enum Priority: Int, Codable {
+        case none = 0
+        case low = 1
+        case medium = 2
+        case high = 3
+    }
+
+    var id: UUID = UUID()
+    var title: String = ""
+    var isCompleted: Bool = false
+    var dueDate: Date? = nil
+    var priority: Int = Priority.none.rawValue
+    var createdAt: Date = Date()
     
     // Embedding for Semantic Search / RAG (Optional)
-    var embedding: [Float]?
+    var embeddingData: Data? = nil
+
+    var embedding: [Float]? {
+        get { embeddingData?.toFloatArray() }
+        set { embeddingData = newValue?.toData() }
+    }
 
     // Timer State Persistence
-    var timerStartTime: Date? // If not nil, timer is running since this date
-    var accumulatedTime: TimeInterval // Total time tracked before current session
+    var timerStartTime: Date? = nil // If not nil, timer is running since this date
+    var accumulatedTime: TimeInterval = 0 // Total time tracked before current session
     
     // Relationships
     
@@ -25,11 +37,10 @@ final class Task: Taggable, TimeBlockable, Embeddable {
     
     // Tags: Many-to-Many
     @Relationship(inverse: \Tag.tasks)
-    var tags: [Tag]?
+    var tags: [Tag]? = []
     
     // TimeBlocks associated with this task (e.g. focused work sessions)
-    @Relationship(inverse: \TimeBlock.linkedTask)
-    var timeBlocks: [TimeBlock]?
+    var timeBlocks: [TimeBlock]? = []
     
     init(
         id: UUID = UUID(),
