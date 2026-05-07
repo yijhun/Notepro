@@ -1,12 +1,12 @@
 import Foundation
 
 /// Protocol for items that can be tagged
-protocol Taggable {
+protocol Taggable: AnyObject {
     var tags: [Tag]? { get set }
 }
 
 /// Protocol for items that can have associated time blocks (events)
-protocol TimeBlockable {
+protocol TimeBlockable: AnyObject {
     var timeBlocks: [TimeBlock]? { get set }
 }
 
