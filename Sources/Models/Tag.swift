@@ -1,11 +1,27 @@
 import Foundation
 import SwiftData
 
-@Model
+@Model // Core schema for Tag
 final class Tag {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var colorHex: String
+    var id: UUID = UUID()
+    var name: String = ""
+    internal var colorHexRaw: String = Tag.defaultColorHex
+
+    var colorHex: String {
+        get { colorHexRaw }
+        set {
+            let range = NSRange(location: 0, length: newValue.utf16.count)
+            if Tag.colorHexRegex.firstMatch(in: newValue, options: [], range: range) != nil {
+                colorHexRaw = newValue
+            } else {
+                colorHexRaw = Tag.defaultColorHex
+            }
+        }
+    }
+
+    static let defaultColorHex = "#808080"
+    static let colorHexPattern = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    static let colorHexRegex = try! NSRegularExpression(pattern: colorHexPattern, options: [])
     
     // Relationships
     var notes: [Note]?
@@ -13,9 +29,10 @@ final class Tag {
     var references: [ZoteroReference]?
     var timeBlocks: [TimeBlock]?
     
-    init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
+    init(id: UUID = UUID(), name: String, colorHex: String = Tag.defaultColorHex) {
         self.id = id
         self.name = name
+        self.colorHexRaw = Tag.defaultColorHex
         self.colorHex = colorHex
     }
 }
