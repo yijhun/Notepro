@@ -2,15 +2,15 @@ import Foundation
 import SwiftData
 
 @Model
-final class Note: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    var title: String
-    var content: String
-    var createdAt: Date
-    var modifiedAt: Date
+final class Note: Taggable, TimeBlockable, Embeddable { // Core schema for Note
+    var id: UUID = UUID()
+    var title: String = ""
+    @Attribute(.externalStorage) var content: String = ""
+    var createdAt: Date = Date()
+    var modifiedAt: Date = Date()
     
     // Embedding for Semantic Search / RAG
-    var embedding: [Float]?
+    var embedding: [Float]? = nil
     
     // Relationships
     
