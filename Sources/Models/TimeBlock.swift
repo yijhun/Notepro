@@ -2,27 +2,21 @@ import Foundation
 import SwiftData
 
 @Model
-final class TimeBlock: Taggable {
-    @Attribute(.unique) var id: UUID
+final class TimeBlock: Taggable { // Core schema for TimeBlock
+    var id: UUID = UUID()
     
     // For syncing with Google Calendar
-    @Attribute(.unique) var googleEventID: String?
+    var googleEventID: String? = nil
     
-    var title: String
-    var startDate: Date {
-        didSet {
-            duration = endDate.timeIntervalSince(startDate)
-        }
+    var title: String = ""
+    var startDate: Date = Date()
+    var endDate: Date = Date()
+
+    var duration: TimeInterval {
+        max(0, endDate.timeIntervalSince(startDate))
     }
 
-    var endDate: Date {
-        didSet {
-            duration = endDate.timeIntervalSince(startDate)
-        }
-    }
-
-    var duration: TimeInterval // Cached duration in seconds
-    var isAllDay: Bool
+    var isAllDay: Bool = false
     
     // Relationships
     
@@ -50,14 +44,7 @@ final class TimeBlock: Taggable {
         self.googleEventID = googleEventID
         self.title = title
         self.startDate = startDate
-        self.endDate = endDate
-        self.duration = endDate.timeIntervalSince(startDate)
+        self.endDate = max(startDate, endDate)
         self.isAllDay = isAllDay
-    }
-
-    /// Recalculates the duration based on start and end dates.
-    /// Call this manually if automated updates fail or when bulk editing.
-    func recalculateDuration() {
-        self.duration = endDate.timeIntervalSince(startDate)
     }
 }
