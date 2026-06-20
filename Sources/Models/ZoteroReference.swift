@@ -3,21 +3,20 @@ import SwiftData
 
 @Model
 final class ZoteroReference: Taggable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    @Attribute(.unique) var zoteroID: String
+    var id: UUID = UUID()
+    var zoteroID: String = ""
     
-    var title: String
-    var authors: [String]
-    var abstract: String?
-    var publicationYear: Int?
-    var url: URL?
+    var title: String = ""
+    var authors: [String] = []
+    var abstract: String? = nil
+    var publicationYear: Int? = nil
+    var url: URL? = nil
     
     // Embedding for Semantic Search
-    var embedding: [Float]?
+    var embedding: [Float]? = nil
     
     // Relationships
     // Assuming Note has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Note.references)
     var linkedNotes: [Note]?
     
     // Assuming Tag has a property `references: [ZoteroReference]?`
