@@ -3,14 +3,14 @@ import SwiftData
 
 @Model
 final class Note: Taggable, TimeBlockable, Embeddable {
-    @Attribute(.unique) var id: UUID
+    var id: UUID = UUID()
     var title: String
-    var content: String
-    var createdAt: Date
-    var modifiedAt: Date
+    @Attribute(.externalStorage) var content: String = ""
+    var createdAt: Date = Date()
+    var modifiedAt: Date = Date()
     
     // Embedding for Semantic Search / RAG
-    var embedding: [Float]?
+    var embedding: [Float]? = nil
     
     // Relationships
     
