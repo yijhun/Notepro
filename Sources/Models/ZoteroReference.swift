@@ -3,11 +3,11 @@ import SwiftData
 
 @Model
 final class ZoteroReference: Taggable, Embeddable {
-    @Attribute(.unique) var id: UUID
-    @Attribute(.unique) var zoteroID: String
+    var id: UUID = UUID()
+    var zoteroID: String = ""
     
-    var title: String
-    var authors: [String]
+    var title: String = ""
+    var authors: [String] = []
     var abstract: String?
     var publicationYear: Int?
     var url: URL?
@@ -17,11 +17,9 @@ final class ZoteroReference: Taggable, Embeddable {
     
     // Relationships
     // Assuming Note has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Note.references)
     var linkedNotes: [Note]?
     
     // Assuming Tag has a property `references: [ZoteroReference]?`
-    @Relationship(inverse: \Tag.references)
     var tags: [Tag]?
 
     init(

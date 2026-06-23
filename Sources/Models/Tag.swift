@@ -3,9 +3,14 @@ import SwiftData
 
 @Model
 final class Tag {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var colorHex: String
+    // Core schema for Tag
+    var id: UUID = UUID()
+    var name: String = ""
+    var colorHexRaw: String = "#808080"
+    var colorHex: String {
+        get { colorHexRaw }
+        set { colorHexRaw = newValue }
+    }
     
     // Relationships
     var notes: [Note]?
@@ -16,6 +21,7 @@ final class Tag {
     init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
         self.id = id
         self.name = name
+        self.colorHexRaw = colorHex
         self.colorHex = colorHex
     }
 }
