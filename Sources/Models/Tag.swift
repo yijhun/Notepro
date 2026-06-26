@@ -1,11 +1,17 @@
 import Foundation
 import SwiftData
 
+// Core schema for Tag
 @Model
 final class Tag {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var colorHex: String
+    var id: UUID = UUID()
+    var name: String = ""
+    var colorHexRaw: String = "#808080"
+
+    var colorHex: String {
+        get { colorHexRaw }
+        set { colorHexRaw = newValue }
+    }
     
     // Relationships
     var notes: [Note]?
@@ -13,9 +19,9 @@ final class Tag {
     var references: [ZoteroReference]?
     var timeBlocks: [TimeBlock]?
     
-    init(id: UUID = UUID(), name: String, colorHex: String = "#808080") {
+    init(id: UUID = UUID(), name: String = "", colorHex: String = "#808080") {
         self.id = id
         self.name = name
-        self.colorHex = colorHex
+        self.colorHexRaw = colorHex
     }
 }
